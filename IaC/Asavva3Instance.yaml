@@ -1,0 +1,8 @@
+Resources:
+  MyS3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: "adamsav123-bucket-03"
+      Tags:
+        - Key: stage
+          Value: production
