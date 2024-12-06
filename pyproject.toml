@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lorequest"
+authors = [{ name = "Adam Savva", email = "adam@vccomputers.ie" }]
+description = "Regional Lore Quest"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+dynamic = ["version", "readme"]
+classifiers = ["Programming Language :: Python :: 3"]
+dependencies = []
+[project.optional-dependencies]
+dev = [
+    "build > 1",
+    "flake8 > 6",
+    "flake8-annotations > 3",
+    "flake8-assertive > 2",
+    "flake8-bugbear > 23",
+    "flake8-comprehensions > 3",
+    "Flake8-pyproject > 1",
+]
+
+[project.scripts]
+lorequest = "lorequest:main_with_args"
+
+[tool.setuptools.packages.find]
+include = ["lorequest*"]
+
+[tool.setuptools.package-data]
+"lorequest.data" = ["*"]
+
+[tool.setuptools.dynamic]
+version = { file = ["lorequest/version.txt"] }
+readme = { file = ["README.md"] }
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+
+[tool.flake8]
+max-line-length = 91
+max-complexity = 16
+select = ["A", "B", "C", "E", "F", "M", "N", "W", "B902", "B950"]
+ignore = ["E203", "E501", "W503", "ANN101", "ANN102"]
+exclude = ["dist/*", "build/*", "__pycache__", ".git", ".vscode", "*.egg-info"]
+
+[tool.isort]
+profile = "black"
+
+[tool.pylint."messages control"]
+disable = ["C0114", "C0115", "C0116"]
