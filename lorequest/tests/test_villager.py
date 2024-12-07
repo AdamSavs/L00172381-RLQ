@@ -1,5 +1,5 @@
 import unittest
-from lorequest.villager_gen import Villager, VillagerGenerator
+from lorequest.features.villager_gen import Villager, VillagerGenerator
 
 
 class TestVillager(unittest.TestCase):
