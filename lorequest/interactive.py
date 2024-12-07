@@ -28,28 +28,31 @@ class InteractiveSystem:
         else:
             print(f"You declined the quest from {villager_name}.")
 
-    def show_active_quests(self) -> None:
+    def show_active_quests(self) -> str:
         """
-        Displays all active quests.
+        Displays all active quests and returns the output as a string.
         """
-        print("\nYour Active Quests:")
+        output = "\nYour Active Quests:\n"
         if not self.active_quests:
-            print("  You have no active quests.")
+            output += "  You have no active quests."
         else:
             for i, quest in enumerate(self.active_quests, start=1):
-                print(f"{i}. {quest}")
+                output += f"{i}. {quest}\n"
+        print(output)
+        return output
 
-    def complete_quest(self, quest_index: int) -> None:
+    def complete_quest(self, quest_index: int) -> str:
         """
-        Marks a quest as completed.
+        Marks a quest as completed and returns the output as a string.
         """
         if 0 <= quest_index < len(self.active_quests):
             quest = self.active_quests.pop(quest_index)
             quest.complete()
-            print(f"You completed the quest: {quest.objective}")
-            print(f"Reward Received: {quest.reward}")
+            output = f"You completed the quest: {quest.objective}\nReward Received: {quest.reward}"
         else:
-            print("Invalid quest number. Please try again.")
+            output = "Invalid quest number. Please try again."
+        print(output)
+        return output
 
     def interact(self) -> None:
         """
