@@ -1,6 +1,6 @@
 import unittest
-from lorequest.features.villager_gen import Villager
-from lorequest.features.quest_system import Quest, QuestGenerator
+from lorequest.villager_gen import Villager
+from lorequest.quest_system import Quest, QuestGenerator
 
 
 class TestQuest(unittest.TestCase):

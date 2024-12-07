@@ -1,5 +1,5 @@
 import random
-from lorequest.features.villager_gen import Villager, VillagerGenerator
+from lorequest.villager_gen import Villager, VillagerGenerator
 
 
 class Quest:
