@@ -1,4 +1,5 @@
 from lorequest.quest_system import QuestGenerator, Quest
+from lorequest.encounter import Encounter
 
 
 class InteractiveSystem:
@@ -43,14 +44,33 @@ class InteractiveSystem:
 
     def complete_quest(self, quest_index: int) -> str:
         """
-        Marks a quest as completed and returns the output as a string.
+        Marks a quest as completed with a chance of an encounter.
+
+        Returns:
+            str: Output describing the result of the quest and encounter.
         """
         if 0 <= quest_index < len(self.active_quests):
             quest = self.active_quests.pop(quest_index)
-            quest.complete()
-            output = f"You completed the quest: {quest.objective}\nReward Received: {quest.reward}"
+            print(f"Starting encounter for quest: {quest.objective}")
+            encounter = Encounter(quest)
+            outcome = encounter.start_encounter()
+
+            if outcome == "success":
+                quest.complete()
+                output = (
+                    f"You successfully completed the quest: {quest.objective}\n"
+                    f"Reward Received: {quest.reward}"
+                )
+            else:
+                output = (
+                    f"You failed the encounter for the quest: {quest.objective}.\n"
+                    "The quest remains incomplete."
+                )
+                # Optional: Re-add the quest for retry
+                self.active_quests.append(quest)
         else:
             output = "Invalid quest number. Please try again."
+
         print(output)
         return output
 
