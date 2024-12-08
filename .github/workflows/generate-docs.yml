@@ -16,16 +16,13 @@ jobs:
           python-version: "3.10"
       - name: Generate Documentation
         run: |
-          mkdir -p docs
+          mkdir -p documents
           for module in $(find lorequest -name "*.py" | sed 's/\.py//' | sed 's/\//./g'); do
               python -m pydoc -w $module
-              mv "$module.html" docs/
+              mv "$module.html" documents/
           done
       - name: Upload Documentation
         uses: actions/upload-artifact@v3
         with:
           name: documentation
-          path: docs
-
-
-
+          path: documents/
