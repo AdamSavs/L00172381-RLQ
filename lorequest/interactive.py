@@ -1,6 +1,7 @@
 from lorequest.quest_system import QuestGenerator, Quest
 from lorequest.encounter import Encounter
 from lorequest.inventory import Inventory
+from lorequest.villager_gen import VillagerGenerator
 
 
 class InteractiveSystem:
@@ -10,26 +11,45 @@ class InteractiveSystem:
 
     def __init__(self):
         self.quest_generator = QuestGenerator()
+        self.villager_generator = VillagerGenerator()  # Initialize VillagerGenerator
         self.active_quests: list[Quest] = []
-        self.inventory = Inventory()  # Add inventory system
+        self.inventory = Inventory()
+        self.villagers = []  # Store generated villagers
+
+    def generate_villagers(self):
+        """Generate a list of villagers."""
+        self.villagers = [
+            self.villager_generator.add_villager("Aria"),
+            self.villager_generator.add_villager("Finn"),
+            self.villager_generator.add_villager("Lila"),
+        ]
+
+    def list_villagers(self) -> None:
+        """Display all available villagers."""
+        print("\nAvailable Villagers:")
+        for villager in self.villagers:
+            print(f"- {villager.name}")
 
     def interact_with_villager(self, villager_name: str) -> None:
-        """
-        Simulates interaction with a villager, offering a quest.
-        """
-        print(f"You meet {villager_name}...")
+        """Simulates interaction with a villager, offering a quest."""
+        villager = next((v for v in self.villagers if v.name == villager_name), None)
+        if not villager:
+            print(f"No villager named {villager_name} found.")
+            return
+
+        print(f"You meet {villager.name} in {villager.location}...")
         quest = self.quest_generator.generate_quest(villager_name)
 
-        print(f"{villager_name} says:")
+        print(f"{villager.name} says:")
         print(f"  '{quest.objective}'")
         print(f"  (Reward: {quest.reward}, Difficulty: {quest.difficulty})")
 
         response = input("Do you accept this quest? (yes/no): ").strip().lower()
         if response == "yes":
-            print(f"You accepted the quest from {villager_name}!")
+            print(f"You accepted the quest from {villager.name}!")
             self.active_quests.append(quest)
         else:
-            print(f"You declined the quest from {villager_name}.")
+            print(f"You declined the quest from {villager.name}.")
 
     def show_active_quests(self) -> str:
         """
