@@ -1,14 +1,17 @@
 from lorequest.quest_system import QuestGenerator, Quest
+from lorequest.encounter import Encounter
+from lorequest.inventory import Inventory
 
 
 class InteractiveSystem:
     """
-    Handles user interaction with villagers and quests.
+    Handles user interaction with villagers, quests, and the inventory.
     """
 
     def __init__(self):
         self.quest_generator = QuestGenerator()
         self.active_quests: list[Quest] = []
+        self.inventory = Inventory()  # Add inventory system
 
     def interact_with_villager(self, villager_name: str) -> None:
         """
@@ -28,31 +31,37 @@ class InteractiveSystem:
         else:
             print(f"You declined the quest from {villager_name}.")
 
-    def show_active_quests(self) -> str:
+    def complete_quest(self, quest_index: int) -> None:
         """
-        Displays all active quests and returns the output as a string.
-        """
-        output = "\nYour Active Quests:\n"
-        if not self.active_quests:
-            output += "  You have no active quests."
-        else:
-            for i, quest in enumerate(self.active_quests, start=1):
-                output += f"{i}. {quest}\n"
-        print(output)
-        return output
+        Completes a quest and gives the player their reward.
 
-    def complete_quest(self, quest_index: int) -> str:
-        """
-        Marks a quest as completed and returns the output as a string.
+        Args:
+            quest_index (int): Index of the quest to complete.
         """
         if 0 <= quest_index < len(self.active_quests):
             quest = self.active_quests.pop(quest_index)
-            quest.complete()
-            output = f"You completed the quest: {quest.objective}\nReward Received: {quest.reward}"
+            print(f"Starting encounter for quest: {quest.objective}")
+            encounter = Encounter(quest)
+            outcome = encounter.start_encounter()
+
+            if outcome == "success":
+                quest.complete()
+                print(f"You successfully completed the quest: {quest.objective}")
+                print(f"Reward Received: {quest.reward}")
+                self.inventory.add_item(quest.reward)
+            else:
+                print(f"You failed the encounter for the quest: {quest.objective}.")
+                print("The quest remains incomplete.")
+                self.active_quests.append(quest)
         else:
-            output = "Invalid quest number. Please try again."
-        print(output)
-        return output
+            print("Invalid quest number. Please try again.")
+
+    def view_inventory(self) -> None:
+        """
+        Displays the player's inventory.
+        """
+        print("\nYour Inventory:")
+        print(self.inventory.view_inventory())
 
     def interact(self) -> None:
         """
@@ -64,7 +73,8 @@ class InteractiveSystem:
             print("1. Talk to a villager")
             print("2. View active quests")
             print("3. Complete a quest")
-            print("4. Exit")
+            print("4. View inventory")
+            print("5. Exit")
 
             choice = input("Enter your choice: ").strip()
             if choice == "1":
@@ -79,6 +89,8 @@ class InteractiveSystem:
                 quest_index = int(input("Enter the number of the quest to complete: ")) - 1
                 self.complete_quest(quest_index)
             elif choice == "4":
+                self.view_inventory()
+            elif choice == "5":
                 print("Goodbye, adventurer!")
                 break
             else:
