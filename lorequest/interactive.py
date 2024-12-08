@@ -1,5 +1,5 @@
 from lorequest.quest_system import QuestGenerator, Quest
-from lorequest.encounter import Encounter
+
 from lorequest.inventory import Inventory
 
 
