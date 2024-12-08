@@ -18,8 +18,10 @@ jobs:
         run: |
           mkdir -p documents
           for module in $(find lorequest -name "*.py" | sed 's/\.py//' | sed 's/\//./g'); do
-              python -m pydoc -w $module
-              mv "$module.html" documents/
+              if [[ $module != "lorequest.__main__" ]]; then
+                  python -m pydoc -w $module
+                  mv "$module.html" documents/
+              fi
           done
       - name: Upload Documentation
         uses: actions/upload-artifact@v3
