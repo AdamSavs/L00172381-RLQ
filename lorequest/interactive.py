@@ -101,9 +101,8 @@ class InteractiveSystem:
         print(self.inventory.view_inventory())
 
     def interact(self) -> None:
-        """
-        Main loop for user interaction.
-        """
+        """Main loop for user interaction."""
+        self.generate_villagers()  # Generate villagers at the start of the interaction
         print("Welcome to the world of LoreQuest!")
         while True:
             print("\nWhat would you like to do?")
@@ -115,6 +114,7 @@ class InteractiveSystem:
 
             choice = input("Enter your choice: ").strip()
             if choice == "1":
+                self.list_villagers()  # Show all villagers
                 villager_name = input(
                     "Enter the name of the villager you want to talk to: "
                 ).strip()
